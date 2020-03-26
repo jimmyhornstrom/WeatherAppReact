@@ -1,3 +1,49 @@
+body{
+  background-color: lightgray;
+}
+
+.forecastContainer{ 
+  margin: auto;
+  border: 2px solid black;
+  border-radius: 10px; 
+  margin-top: 50px;
+  height: 300px;
+  width: 880px;
+  
+}
+
+.forecast{
+  border-radius: 10px;
+  float: left;
+  margin-left: 50px;
+  text-align: center;
+  
+}
+
+.weatherInfo{
+  margin: 0 auto;
+  text-align: center;
+  height: 300px;
+  width: 300px;
+}
+
+.upperContainer{
+  border: 2px solid black;
+  border-radius: 10px;
+  margin: auto;
+  margin-top: 50px;
+  height: 400px;
+  width: 400px;
+}
+
+input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
+
 .App {
   text-align: center;
 }
