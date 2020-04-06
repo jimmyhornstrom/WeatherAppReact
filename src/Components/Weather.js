@@ -109,36 +109,45 @@ export default class Weather extends Component{
         this.setState({inputData:value})
     }
 
+    formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [year, month, day].join('-');
+    }
+
     getFiveDates(){
         var array = [];
 
         var today = new Date();
 
             var forecast1Date = new Date();
-            forecast1Date.setDate(today.getDate()+ 1)
-            let formatted_date1 = forecast1Date.getFullYear() + "-" + "0" + (forecast1Date.getMonth() + 1) + "-" + forecast1Date.getDate();
+            forecast1Date.setDate(today.getDate()+ 1);
+            var testDate1 = this.formatDate(forecast1Date);
 
             var forecast2Date = new Date();
-            forecast2Date.setDate(today.getDate()+ 2)
-            let formatted_date2 = forecast2Date.getFullYear() + "-" + "0" + (forecast2Date.getMonth() + 1) + "-" + forecast2Date.getDate();
+            forecast2Date.setDate(today.getDate()+ 2);
+            var testDate2 = this.formatDate(forecast2Date);
 
             var forecast3Date = new Date();
-            forecast3Date.setDate(today.getDate()+ 2)
-            let formatted_date3 = forecast3Date.getFullYear() + "-" + "0" + (forecast3Date.getMonth() + 1) + "-" + forecast3Date.getDate();
+            forecast3Date.setDate(today.getDate()+ 3)
+            var testDate3 = this.formatDate(forecast3Date);
 
             var forecast4Date = new Date();
-            forecast4Date.setDate(today.getDate()+ 2)
-            let formatted_date4 = forecast4Date.getFullYear() + "-" + "0" + (forecast4Date.getMonth() + 1) + "-" + forecast4Date.getDate();
+            forecast4Date.setDate(today.getDate()+ 4)
+            var testDate4 = this.formatDate(forecast4Date);
 
-            var forecast5Date = new Date();
-            forecast5Date.setDate(today.getDate()+ 2)
-            let formatted_date5 = forecast5Date.getFullYear() + "-" + "0" + (forecast5Date.getMonth() + 1) + "-" + forecast5Date.getDate();
-
-            array.push(formatted_date1)
-            array.push(formatted_date2)
-            array.push(formatted_date3)
-            array.push(formatted_date4)
-            array.push(formatted_date5)
+            array.push(testDate1)
+            array.push(testDate2)
+            array.push(testDate3)
+            array.push(testDate4)
 
         return array;
     }
@@ -154,7 +163,7 @@ export default class Weather extends Component{
     }
 
     calculateMin(data){
-        var min = data[0].main.temp
+        var min = data[0].main.temp;
             for(let result of data){
                 if(min > result.main.temp)
                 min = result.main.temp
@@ -185,17 +194,20 @@ export default class Weather extends Component{
         .then(res => res.json())
         .then(data => {
 
+            console.log(data);
            
             var dates = this.getFiveDates();
-            console.log(dates)
+            console.log(dates);
 
             const forecast1Data = data.list.filter(reading => reading.dt_txt.includes(dates[0]));
             const forecast2Data = data.list.filter(reading => reading.dt_txt.includes(dates[1]));
             const forecast3Data = data.list.filter(reading => reading.dt_txt.includes(dates[2]));
             const forecast4Data = data.list.filter(reading => reading.dt_txt.includes(dates[3]));
-            const forecast5Data = data.list.filter(reading => reading.dt_txt.includes(dates[4]));
 
             console.log(forecast1Data)
+            console.log(forecast2Data)
+            console.log(forecast3Data)
+            console.log(forecast4Data)
 
             var maxDate1 = this.calculateMax(forecast1Data)
             var minDate1 = this.calculateMin(forecast1Data)
@@ -209,8 +221,6 @@ export default class Weather extends Component{
             var maxDate4 = this.calculateMax(forecast4Data)
             var minDate4 = this.calculateMin(forecast4Data)
 
-            var maxDate5 = this.calculateMax(forecast5Data)
-            var minDate5 = this.calculateMin(forecast5Data)
            
 
             let dataForecast1 = {
@@ -241,18 +251,10 @@ export default class Weather extends Component{
                 img: `http://openweathermap.org/img/wn/${forecast4Data[6].weather[0].icon}@2x.png`
             }
 
-            let dataForecast5 = {
-                date: forecast5Data[0].dt_txt.replace("00:00:00", ""),
-                minTemp: minDate5,
-                maxTemp: maxDate5,
-                img: `http://openweathermap.org/img/wn/${forecast5Data[6].weather[0].icon}@2x.png`
-            }
-
             this.setState({forecast1: dataForecast1})
             this.setState({forecast2: dataForecast2})
             this.setState({forecast3: dataForecast3})
             this.setState({forecast4: dataForecast4})
-            this.setState({forecast5: dataForecast5})
         } ) 
     }
 
@@ -275,9 +277,6 @@ export default class Weather extends Component{
             </div>
             <div className="forecast">
             <DayCard weatherData = {this.state.forecast4} />
-            </div>
-            <div className="forecast">
-            <DayCard weatherData = {this.state.forecast5} />
             </div>
         </div>
         
