@@ -16,17 +16,16 @@ export default class Weather extends Component{
         forecast2: {},
         forecast3: {},
         forecast4: {},
-        forecast5: {},
         inputData: "",
     }
     
     calculateLocalTime(timezone){
         let today = new Date();
 
-        today.setHours(today.getHours(),today.getMinutes() - 60 + parseInt(timezone/60));
+        today.setHours(today.getHours() -1 ,today.getMinutes() - 60 + parseInt(timezone/60));
 
         let todayString = today.toString();
-        todayString = todayString.replace("GMT+0100 (centraleuropeisk normaltid)", "")
+        todayString = todayString.replace("GMT+0200 (centraleuropeisk sommartid)", "")
 
         return todayString;
     
@@ -55,12 +54,9 @@ export default class Weather extends Component{
         fetch(url)
         .then(res => res.json())
         .then(data => {
-            //console.log(data)
             const dailyData = data.list.filter(reading => reading.dt_txt.includes("06:00:00"));
             const dailyDataTwo = data.list.filter(reading => reading.dt_txt.includes("15:00:00"));
 
-            console.log(dailyData)
-            console.log(dailyDataTwo)
             let dataForecast1 = {
                 date: dailyData[0].dt_txt.replace("06:00:00", ""),
                 minTemp: dailyData[0].main.temp,
@@ -89,19 +85,11 @@ export default class Weather extends Component{
                 img: `http://openweathermap.org/img/wn/${dailyDataTwo[3].weather[0].icon}@2x.png`
             }
 
-            let dataForecast5 = {
-                date: dailyData[4].dt_txt.replace("06:00:00", ""),
-                minTemp: dailyData[4].main.temp,
-                maxTemp: dailyDataTwo[4].main.temp,
-                img: `http://openweathermap.org/img/wn/${dailyDataTwo[4].weather[0].icon}@2x.png`
-            }
-
             
             this.setState({forecast1: dataForecast1})
             this.setState({forecast2: dataForecast2})
             this.setState({forecast3: dataForecast3})
             this.setState({forecast4: dataForecast4})
-            this.setState({forecast5: dataForecast5})
         } ) 
     }
 
@@ -194,20 +182,12 @@ export default class Weather extends Component{
         .then(res => res.json())
         .then(data => {
 
-            console.log(data);
-           
             var dates = this.getFiveDates();
-            console.log(dates);
 
             const forecast1Data = data.list.filter(reading => reading.dt_txt.includes(dates[0]));
             const forecast2Data = data.list.filter(reading => reading.dt_txt.includes(dates[1]));
             const forecast3Data = data.list.filter(reading => reading.dt_txt.includes(dates[2]));
             const forecast4Data = data.list.filter(reading => reading.dt_txt.includes(dates[3]));
-
-            console.log(forecast1Data)
-            console.log(forecast2Data)
-            console.log(forecast3Data)
-            console.log(forecast4Data)
 
             var maxDate1 = this.calculateMax(forecast1Data)
             var minDate1 = this.calculateMin(forecast1Data)
